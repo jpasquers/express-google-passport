@@ -1,0 +1,28 @@
+{
+  "name": "express-app",
+  "version": "1.0.0",
+  "description": "Test express app for trying out authentication",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/index.js"
+  },
+  "author": "jp606j",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "mongoose": "^5.0.1",
+    "passport": "^0.4.0",
+    "passport-custom": "^1.0.5",
+    "passport-google-auth": "^1.0.2",
+    "passport-google-oauth": "^1.0.0",
+    "passport-openid": "^0.4.0",
+    "query-string": "^5.0.1",
+    "randomstring": "^1.1.5",
+    "request-debug": "^0.2.0"
+  }
+}
