@@ -40,7 +40,7 @@ function GoogleStrategy() {
 }
 
 GoogleStrategy.prototype._verify = function (req, done) {
-    if (req.query.state == this.state) {
+    if (req.query.state.split("|")[0] == this.state) {
         console.log("states match, valid request");
         let props = {
             //the code is returned by google. It, in combination with our app's id and secret,
@@ -58,6 +58,7 @@ GoogleStrategy.prototype._verify = function (req, done) {
         }, (err, res, body) => {
             if (err) done(err, {}, {});
             else {
+                console.log("found jwt user");
                 //the id_token is a JWT token of the user. Ideally one would verify the token as well,
                 //but I ignored that for now.
                 let JWT_user = jwt.decode(JSON.parse(body).id_token);
@@ -91,23 +92,27 @@ GoogleStrategy.prototype.authenticate = function(req, options) {
         let verified = (err, user, info) => {
             if (err) this.fail(err);
             else {
+                console.log("found user");
+                console.log(user);
                 this.success(user, info);
             }
         }
 
         this._verify(req, verified);
     }
-    //initial call, redirect them to google
-    else {
-        let props = {
-            client_id: this.clientID,
-            response_type: "code",
-            scope: "openid email",
-            redirect_uri: this.redirectUri,
-            state: this.state
-        }
-        this.redirect(this.googleAuthUri + "?" +  queryString.stringify(props));
+}
+
+GoogleStrategy.prototype.redirectToGoogle = function(req,res) {
+    console.log("in redirect to google");
+    console.log(req.path);
+    let props = {
+        client_id: this.clientID,
+        response_type: "code",
+        scope: "openid email",
+        redirect_uri: this.redirectUri ,
+        state: this.state + "|" + req.path
     }
+    res.redirect(this.googleAuthUri + "?" +  queryString.stringify(props));
 }
 
 util.inherits(GoogleStrategy, Strategy);

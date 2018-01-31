@@ -30,7 +30,7 @@ let loggedIn = (req,res,next) => {
         next();
     }
     else {
-        res.redirect("/login.html");
+        googleStrat.redirectToGoogle(req,res);
     }
 }
 
@@ -49,11 +49,15 @@ app.set('view engine', 'ejs');
 
 
 app.get('/auth/google', 
-    passport.authenticate("myGoogleStrategy", {})
+    (req, res) => {googleStrat.redirectToGoogle(req,res)}
 );
   
-app.get('/auth/google/callback', 
-    passport.authenticate("myGoogleStrategy", {successRedirect: "/", failureRedirect: "login.html"})
+app.get('/auth/google/callback',
+    passport.authenticate("myGoogleStrategy", { failureRedirect: "login.html"}),
+    (req,res,next) => {
+        let redirectUri = req.query.state.split("|")[1];
+        res.redirect(redirectUri);
+    }
 );
 
 app.get("/", loggedIn, (req, res) => {
