@@ -23,7 +23,7 @@ const User = require("./model/User");
 
 function GoogleStrategy() {
     //We include this state in our redirect to google. Google then includes it in its redirect back to us,
-    //This is basically an anti-forgery token.
+    //This is basically an anti-forgery token. 
     //Ideally we would also include a 'nonce' to protect against replays, but this isn't required and isn't necessary for demo.
     this.state = randomstring.generate({length: 30, charset: "alphabetic"});
     //This is an id/secret for our application (express test app i think). I don't care if people know it, this is a throwaway app
